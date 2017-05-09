@@ -1,0 +1,10 @@
+language: python
+sudo: false
+notifications:
+  email: false
+python:
+- '2.7'
+install:
+- make dependencies
+script:
+- make check-syntax
