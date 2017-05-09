@@ -1,5 +1,6 @@
 PATH_VENV=venv
-PATH_REQUIREMENTS=glpi-cli/requirements.txt
+PATH_REQUIREMENTS=tests/requirements.txt
+PATH_PKG=$(PWD)
 
 .PHONY: venv
 venv:
@@ -10,6 +11,12 @@ venv:
 dependencies:
 	@if [ ! -d $(PATH_VENV) ]; then virtualenv $(PATH_VENV) ; fi
 	. $(PATH_VENV)/bin/activate && pip install -r $(PATH_REQUIREMENTS)
+
+.PHONY: install-me
+install-me:
+	@rm -rf $(PATH_VENV)
+	@if [ ! -d $(PATH_VENV) ]; then virtualenv $(PATH_VENV) ; fi
+	. $(PATH_VENV)/bin/activate && pip install -e $(PATH_PKG)
 
 .PHONY: check-syntax
 check-syntax:

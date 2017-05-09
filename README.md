@@ -49,6 +49,12 @@ python glpi-cli.py --item knowbase --command get_all |jq .[].name
 
 ## Get Involved
 
-PR are welcome. Please make sure to the code have passed in a basic syntax check:
+PR are always welcome. =]
 
-`make  dependencies && make check-syntax`
+Please make sure that the code have passed in following tests:
+
+```shell
+make  dependencies
+make check-syntax
+make install-me
+```

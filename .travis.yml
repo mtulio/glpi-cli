@@ -8,3 +8,4 @@ install:
 - make dependencies
 script:
 - make check-syntax
+- make install-me
