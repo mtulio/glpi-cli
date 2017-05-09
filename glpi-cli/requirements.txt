@@ -1,3 +1,0 @@
-pep8
-python-dotenv
-glpi

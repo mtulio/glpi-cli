@@ -24,6 +24,8 @@ setup(
     classifiers=[],
     keywords=['GLPI', 'CLI'],
     install_requires=[
-        'requests',
+        'glpi',
+        'dotenv',
+        'argparse',
     ]
 )
