@@ -23,14 +23,8 @@
 import json
 import os
 import sys
-from dotenv import load_dotenv, find_dotenv
-from glpi import GLPI
 import argparse
-
-
-load_dotenv(find_dotenv())
-global glpi
-glpi = glpi_url = glpi_user = glpi_pass = glpi_token = None
+from glpi import GLPI
 
 
 class CLI(object):
@@ -82,7 +76,7 @@ class CLI(object):
         return item
 
 
-if __name__ == '__main__':
+def main():
     """
     This CLI catch user entry and call GLPI Rest using GLPI SDK.
     Options allowed:
@@ -111,16 +105,17 @@ if __name__ == '__main__':
                         help="GLPI Item Payload to be updated.")
 
     args = parser.parse_args()
-    cli = CLI()
-    item_dict = {}
 
     # ID should be defined in...
     if (args.command == 'get') or \
        (args.command == 'delete') or \
        (args.command == 'update'):
         if not args.item_id:
-            print '{ "error_message": "This command requires --id optio" }'
+            print '{ "error_message": "This command requires option --id ID" }'
             sys.exit(1)
+
+    cli = CLI()
+    item_dict = {}
 
     if (args.command == 'get'):
         print json.dumps(cli.get(args.item_name, args.item_id),
@@ -145,3 +140,6 @@ if __name__ == '__main__':
         print "{ \"message\": \"%s\" }" % msg
 
     sys.exit(0)
+
+if __name__ == '__main__':
+    main()

@@ -10,11 +10,15 @@ This CLI use this [GLPI SDK](https://github.com/truly-systems/glpi-sdk-python)
 
 ## Config
 
-Clone this repository
+Install from repository
 
-`git clone https://github.com/mtulio/glpi-cli`
+```
+git clone https://github.com/mtulio/glpi-cli
+cd glpi-cli
+make install-me
+```
 
-OR install it using pip
+OR install it using pip:
 
 `pip install glpi-cli`
 
@@ -32,19 +36,19 @@ export GLPI_APP_TOKEN=<Your User APP Token>
 * Get all Ticket items
 
 ```shell
-python glpi-cli.py --item knowbase --command get_all
+$ glpi-cli --item ticket --command get_all
 ```
 
 * Get an Ticket by ID
 
 ```shell
-python glpi-cli.py --item knowbase --command get_all --id 10
+$ glpi-cli --item ticket --command get_all --id 10
 ```
 
-* Get all Knowledge Base items filtering output with json util `jq`
+* Get all Knowledge Base Titles - filtered output with json util `jq`
 
 ```shell
-python glpi-cli.py --item knowbase --command get_all |jq .[].name
+$ glpi-cli --item knowbase --command get_all |jq .[].name
 ```
 
 ## Get Involved

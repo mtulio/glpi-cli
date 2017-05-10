@@ -8,16 +8,16 @@ def readme():
     with open(path.join(here, 'README.md'), encoding='utf-8') as f:
         return f.read()
 
-exec (open('glpi-cli/version.py').read())
+exec (open('glpicli/version.py').read())
 
 setup(
     name='glpi-cli',
-    packages=["glpi-cli"],
+    packages=["glpicli"],
     version=__version__,
     description='GLPI Command Line Interface',
     #long_description=readme(),
     url='https://github.com/mtulio/glpi-cli',
-    download_url='https://github.com/mtulio/glpi-cli/archive/0.1.1.tar.gz',
+    download_url='https://github.com/mtulio/glpi-cli/archive/0.1.2.tar.gz',
     author='Marco Tulio R Braga',
     author_email='braga@mtulio.eng.br',
     license='Apache-2.0',
@@ -25,7 +25,7 @@ setup(
     keywords=['GLPI', 'CLI'],
     install_requires=[
         'glpi',
-        'dotenv',
         'argparse',
-    ]
+    ],
+    scripts=['bin/glpi-cli'],
 )
