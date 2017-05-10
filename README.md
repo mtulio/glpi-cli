@@ -1,6 +1,7 @@
 # glpi-cli
 
 [![Build Status](https://travis-ci.org/mtulio/glpi-cli.svg?branch=master)](https://travis-ci.org/mtulio/glpi-cli)
+[![PyPi Version](https://img.shields.io/pypi/v/glpi-cli.svg)](https://pypi.python.org/pypi/glpi-cli)
 
 GLPI Command Line Interface.
 
