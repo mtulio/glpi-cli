@@ -20,7 +20,7 @@ install-me:
 
 .PHONY: check-syntax
 check-syntax:
-	. $(PATH_VENV)/bin/activate && pep8 glpi-cli/*.py
+	. $(PATH_VENV)/bin/activate && pep8 glpicli/*.py
 
 .PHONY: clean
 clean:
