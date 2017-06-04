@@ -93,11 +93,11 @@ def main():
                         required=True,
                         help="GLPI Item Name. [ticket, knownbase]")
 
-    parser.add_argument("--command", metavar='n', dest="command",
+    parser.add_argument("--command", metavar='c', dest="command",
                         required=True,
                         help="Command could be: [get|get_all].")
 
-    parser.add_argument("--id", metavar='n', dest="item_id",
+    parser.add_argument("--id", metavar='id', dest="item_id",
                         type=int,
                         help="GLPI Item ID.")
 
@@ -124,10 +124,13 @@ def main():
                          sort_keys=True)
 
     elif (args.command == 'get_all'):
-        print json.dumps(cli.get_all(args.item_name),
+        try:
+            print json.dumps(cli.get_all(args.item_name),
                          indent=4,
                          separators=(',', ': '),
                          sort_keys=True)
+        except Exception as e:
+            print('{ "error_message": "get_all: {}".format(e) }')
 
     elif (args.command == 'delete'):
         print '{ "error_message": "Option unavailable yet" }'
@@ -136,8 +139,8 @@ def main():
         print '{ "error_message": "Option unavailable yet" }'
 
     else:
-        msg = "Command [%s] not found" % (args.command)
-        print "{ \"message\": \"%s\" }" % msg
+        msg = "Command [{}] not found".format(args.command)
+        print "{ \"message\": \"{}\" }".format(msg)
 
     sys.exit(0)
 
