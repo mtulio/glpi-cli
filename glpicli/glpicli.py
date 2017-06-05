@@ -126,9 +126,9 @@ def main():
     elif (args.command == 'get_all'):
         try:
             print json.dumps(cli.get_all(args.item_name),
-                         indent=4,
-                         separators=(',', ': '),
-                         sort_keys=True)
+                             indent=4,
+                             separators=(',', ': '),
+                             sort_keys=True)
         except Exception as e:
             print('{ "error_message": "get_all: {}".format(e) }')
 
