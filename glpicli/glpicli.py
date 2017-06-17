@@ -95,6 +95,7 @@ class CLI(object):
 
         return item
 
+
 def get_prompt_yes_or_no(msg_input):
     """
     Show an prompt msg and check answer was yes/no/unknown.
@@ -106,8 +107,8 @@ def get_prompt_yes_or_no(msg_input):
 
     msg_output = ""
     msg_code = 2
-    yes = set(['yes','y', 'ye', ''])
-    no = set(['no','n'])
+    yes = set(['yes', 'y', 'ye', ''])
+    no = set(['no', 'n'])
 
     msg_answer = raw_input(msg_input).lower()
     if msg_answer in yes:
@@ -120,6 +121,7 @@ def get_prompt_yes_or_no(msg_input):
         msg_output = "Please respond with 'yes' or 'no'."
 
     return msg_code, msg_output
+
 
 def main():
     """
@@ -146,12 +148,12 @@ def main():
                         type=int, required=False,
                         help="GLPI Item ID.")
 
-    parser.add_argument("-f", "--force", action="store_true", dest="flag_force",
-                        required=False, default=False,
+    parser.add_argument("-f", "--force", action="store_true",
+                        dest="flag_force", required=False, default=False,
                         help="Force changes.")
 
-    parser.add_argument("-v", "--verbose", action="store_true", dest="flag_verbose",
-                        required=False, default=False,
+    parser.add_argument("-v", "--verbose", action="store_true",
+                        dest="flag_verbose", required=False, default=False,
                         help="Verbose.")
 
     parser.add_argument("-p", "--payload", metavar='p', dest="item_payload",
@@ -191,7 +193,7 @@ def main():
         try:
             item = cli.get(args.item_name, args.item_id)
 
-            if not 'id' in item:
+            if 'id' not in item:
                 print("ID not found in GLPI server. Aborting...")
                 sys.exit(1)
 
@@ -201,25 +203,26 @@ def main():
                              sort_keys=True)
 
             if not args.flag_force:
-                rc, rm = get_prompt_yes_or_no("The item above will deleted, do you want to continue? [y/n]")
+                msg = "The item will deleted, do you want to continue? [y/n]"
+                rc, rm = get_prompt_yes_or_no(msg)
                 if rc > 0:
                     print(rm)
                     sys.exit(1)
 
-            print("Deleting item ID {}".format(args.item_id) )
+            print("Deleting item ID {}".format(args.item_id))
             print json.dumps(cli.delete(args.item_name, args.item_id),
-                              indent=4,
-                              separators=(',', ': '),
-                              sort_keys=True)
+                             indent=4,
+                             separators=(',', ': '),
+                             sort_keys=True)
         except Exception as e:
-            print('{ "error_message": "delete: %s" }' % e )
+            print('{ "error_message": "delete: %s" }' % e)
 
     elif (args.command == 'update'):
         try:
             item = cli.get(args.item_name, args.item_id)
             k_update = {}
 
-            if not 'id' in item:
+            if 'id' not in item:
                 print("ID not found in GLPI server. Aborting...")
                 sys.exit(1)
 
@@ -228,24 +231,24 @@ def main():
             # looking for changes
             for k in payload:
                 if k not in item:
-                    if not 'notFound' in k_update:
+                    if 'notFound' not in k_update:
                         k_update['notFound'] = {}
-                    k_update['notFound'].update({ k: payload[k]})
+                    k_update['notFound'].update({k: payload[k]})
                     continue
 
                 if k == 'id':
                     continue
 
                 if payload[k] == item[k]:
-                    if not 'notChanged' in k_update:
+                    if 'notChanged' not in k_update:
                         k_update['notChanged'] = {}
-                    k_update['notChanged'].update({ k: payload[k]})
+                    k_update['notChanged'].update({k: payload[k]})
                     continue
 
-                if not 'change' in k_update:
+                if 'change' not in k_update:
                     k_update['change'] = {}
 
-                k_update['change'].update({ k: payload[k]})
+                k_update['change'].update({k: payload[k]})
 
             if args.flag_verbose:
                 print("Original Item: ")
@@ -262,7 +265,7 @@ def main():
                 print("The key(s) bellow was not changed: ")
                 print(json.dumps(k_update['notChanged'], indent=4))
 
-            if not 'change' in k_update:
+            if 'change' not in k_update:
                 print("Nothing to change, exiting...")
                 sys.exit(0)
 
@@ -287,17 +290,17 @@ def main():
                     print(rm)
                     sys.exit(1)
 
-            k_update['change'].update({ "id": args.item_id })
+            k_update['change'].update({"id": args.item_id})
             payload = k_update['change']
 
-            print("Updating the item ID {}".format(args.item_id) )
+            print("Updating the item ID {}".format(args.item_id))
             print(json.dumps(cli.update(args.item_name, payload),
-                              indent=4,
-                              separators=(',', ': '),
-                              sort_keys=True))
+                             indent=4,
+                             separators=(',', ': '),
+                             sort_keys=True))
 
         except Exception as e:
-            print('{ "error_message": "update: %s" }' % e )
+            print('{ "error_message": "update: %s" }' % e)
 
     else:
         msg = ("Command [{}] not found".format(args.command))
