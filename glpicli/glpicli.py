@@ -75,6 +75,16 @@ class CLI(object):
 
         return item
 
+    def delete(self, item_name, item_id, flag_force=False):
+        """ Wrapper to GLPI DELETE """
+        item = {}
+        try:
+            item = self.glpi.delete(item_name, item_id)
+        except Exception as e:
+            item = "{ \"error_message\": \"%s\" }" % e
+
+        return item
+
 
 def main():
     """
@@ -89,19 +99,23 @@ def main():
                                      usage='%(prog)s --item item_name '
                                      '--command cmd [options]')
 
-    parser.add_argument("--item", metavar='i', dest="item_name",
+    parser.add_argument("-i", "--item", metavar='i', dest="item_name",
                         required=True,
                         help="GLPI Item Name. [ticket, knownbase]")
 
-    parser.add_argument("--command", metavar='c', dest="command",
+    parser.add_argument("-c", "--command", metavar='c', dest="command",
                         required=True,
                         help="Command could be: [get|get_all].")
 
-    parser.add_argument("--id", metavar='id', dest="item_id",
-                        type=int,
+    parser.add_argument("-id", "--id", metavar='id', dest="item_id",
+                        type=int, required=False,
                         help="GLPI Item ID.")
 
-    parser.add_argument("--payload", metavar='p', dest="item_payload",
+    parser.add_argument("-f", "--force", action="store_true", dest="flag_force",
+                        required=False, default=False,
+                        help="GLPI Item ID.")
+
+    parser.add_argument("-p", "--payload", metavar='p', dest="item_payload",
                         help="GLPI Item Payload to be updated.")
 
     args = parser.parse_args()
@@ -131,16 +145,49 @@ def main():
                              sort_keys=True)
         except Exception as e:
             print('{ "error_message": "get_all: {}".format(e) }')
+            sys.exit(1)
 
     elif (args.command == 'delete'):
-        print '{ "error_message": "Option unavailable yet" }'
+
+        try:
+            flag_force = False
+            item = cli.get(args.item_name, args.item_id)
+
+            print json.dumps(item,
+                             indent=4,
+                             separators=(',', ': '),
+                             sort_keys=True)
+
+            if not args.flag_force:
+                yes = set(['yes','y', 'ye', ''])
+                no = set(['no','n'])
+
+                del_answer = raw_input("The item above will deleted, do you want to continue? [y/n]").lower()
+                if del_answer in yes:
+                    print("deleting")
+                elif del_answer in no:
+                   print("Ok, aborting...")
+                   sys.exit(1)
+                else:
+                   print("Please respond with 'yes' or 'no'. Aborting")
+                   sys.exit(1)
+
+            print("Deleting item ID {}".format(args.item_id) )
+            print json.dumps(cli.delete(args.item_name, args.item_id),
+                              indent=4,
+                              separators=(',', ': '),
+                              sort_keys=True)
+        except Exception as e:
+            print('{ "error_message": "delete: %s" }' % e )
 
     elif (args.command == 'update'):
-        print '{ "error_message": "Option unavailable yet" }'
+        print('{ "error_message": "Option unavailable yet" }')
+        sys.exit(1)
 
     else:
-        msg = "Command [{}] not found".format(args.command)
-        print "{ \"message\": \"{}\" }".format(msg)
+        msg = ("Command [{}] not found".format(args.command))
+        print('{ "error_message": "%s" }' % msg)
+        sys.exit(1)
 
     sys.exit(0)
 
