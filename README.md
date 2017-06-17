@@ -32,7 +32,7 @@ export GLPI_PASSWORD=<Your password>
 export GLPI_APP_TOKEN=<Your User APP Token>
 ```
 
-## Use it
+## USAGE
 
 * Get all Ticket items
 
@@ -50,6 +50,36 @@ $ glpi-cli --item ticket --command get_all --id 10
 
 ```shell
 $ glpi-cli --item knowbase --command get_all |jq .[].name
+```
+
+* Get Item deleted flag
+
+```shell
+$ glpi-cli -i ticket -c get -id 52 |jq .is_deleted
+```
+
+* Delete Ticket
+
+```shell
+$ glpi-cli -i ticket -c delete -id 52
+```
+
+* Update Ticket
+
+```shell
+$ glpi-cli -i ticket -c update -id 52 -p '{ "status": 5, "impact": 2}'
+```
+
+* Update Ticket, forcing
+
+```shell
+$ glpi-cli -i ticket -c update -id 52 -p '{ "status": 5, "impact": 2}' -f
+```
+
+* Update Ticket, forcing and verbosiity
+
+```shell
+$ glpi-cli -i ticket -c update -id 52 -p '{ "status": 5, "impact": 2}' -v -f
 ```
 
 ## Get Involved
